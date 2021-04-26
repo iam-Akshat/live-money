@@ -1,0 +1,20 @@
+<button onClick="startTimer()">Start</button>
+<button onClick="stopTimer()">Stop</button>
+<script>
+  let timerId;
+  let prevBalance = 0;
+  let i = 1;
+  const stopTimer = () =>{
+    clearInterval(timerId)
+    prevBalance = ((i/60)*5.25)
+    i=1
+  }
+  const startTimer = () =>{
+    timerId = setInterval(()=>{
+    document.title =  `${(((i/60)*5.25) + prevBalance).toPrecision(3)} rs`
+    i++;
+  },1000)
+  }
+  
+  
+</script>
