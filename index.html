@@ -1,20 +1,66 @@
-<button onClick="startTimer()">Start</button>
-<button onClick="stopTimer()">Stop</button>
-<script>
-  let timerId;
-  let prevBalance = 0;
-  let i = 1;
-  const stopTimer = () =>{
-    clearInterval(timerId)
-    prevBalance = ((i/60)*5.25)
-    i=1
-  }
-  const startTimer = () =>{
-    timerId = setInterval(()=>{
-    document.title =  `${(((i/60)*5.25) + prevBalance).toPrecision(3)} rs`
-    i++;
-  },1000)
-  }
-  
-  
-</script>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <button id="start">Start</button>
+  <button id="stop">Stop</button>
+  <button id="clear">Clear</button>
+  <script>
+    const startButton =  document.getElementById('start');
+    const stopButton  =  document.getElementById('stop');
+    const clearButton  =  document.getElementById('clear');
+
+    
+    let timerId;
+    let prevBalance ;
+    let i = 1;
+
+    const initApp = () =>{
+      prevBalance = +window.localStorage.getItem('prevBalance');
+      if(!prevBalance){
+        prevBalance = 0;
+      }
+    }
+    
+    const stopTimer = () => {
+      clearInterval(timerId)
+      prevBalance = ((i / 60) * 5.25) + prevBalance;
+      window.localStorage.setItem('prevBalance',prevBalance)
+      i = 1
+    }
+    const startTimer = () => {
+      initApp()
+      timerId = setInterval(() => {
+        document.title = `${(((i / 60) * 5.25) + prevBalance)} rs`
+        i++;
+      }, 1000)
+    }
+    startButton.addEventListener('click',()=>{
+      startTimer();
+      startButton.setAttribute('disabled','true')
+      stopButton.removeAttribute('disabled')
+    });
+
+    stopButton.addEventListener('click',()=>{
+      startButton.removeAttribute('disabled')
+      stopTimer();  
+      stopButton.setAttribute('disabled','true')
+    });
+    clearButton.addEventListener('click',()=>{
+      const del =confirm('reset data to 0 ')
+      if(del){
+        window.localStorage.clear();
+      } 
+    })
+    stopButton.setAttribute('disabled','true');
+  </script>
+</body>
+
+</html>
